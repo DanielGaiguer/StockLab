@@ -1,8 +1,10 @@
 package com.main.stocklab.controller;
 
+import com.main.stocklab.dto.BatchMovementRequestDTO;
 import com.main.stocklab.dto.StockMovementDTO;
 import com.main.stocklab.dto.UpdateStockDTO;
 import com.main.stocklab.service.StockMovementService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -52,9 +54,15 @@ public class StockMovementController {
     @PostMapping("/{componentId}")
     public ResponseEntity<Void> create(
             @PathVariable Long componentId,
-            @RequestBody UpdateStockDTO request) {
+            @Valid @RequestBody UpdateStockDTO request) {
 
         service.updateStock(componentId, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/batch")
+    public ResponseEntity<Void> createBatch(@Valid @RequestBody BatchMovementRequestDTO request) {
+        service.createBatch(request);
         return ResponseEntity.ok().build();
     }
 }

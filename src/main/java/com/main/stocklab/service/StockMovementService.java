@@ -1,5 +1,6 @@
 package com.main.stocklab.service;
 
+import com.main.stocklab.dto.BatchMovementRequestDTO;
 import com.main.stocklab.dto.StockMovementDTO;
 import com.main.stocklab.dto.UpdateStockDTO;
 import com.main.stocklab.model.Component;
@@ -79,6 +80,20 @@ public class StockMovementService {
         movement.setPerformedBy(dto.performedBy());
         movement.setNotes(dto.notes());
         repository.save(movement);
+    }
+
+    @Transactional
+    public void createBatch(BatchMovementRequestDTO dto) {
+        for (var item : dto.items()) {
+            UpdateStockDTO update = new UpdateStockDTO(
+                    dto.movementType(),
+                    item.quantity(),
+                    null,
+                    dto.performedBy(),
+                    null
+            );
+            updateStock(item.componentId(), update);
+        }
     }
 
     private StockMovementDTO toDTO(StockMovement m) {

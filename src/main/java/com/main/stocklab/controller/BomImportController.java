@@ -3,6 +3,7 @@ package com.main.stocklab.controller;
 import com.main.stocklab.dto.BomImportRequestDTO;
 import com.main.stocklab.dto.BomImportResultDTO;
 import com.main.stocklab.service.BomImportService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class BomImportController {
 
     @PostMapping("/import")
     public ResponseEntity<BomImportResultDTO> importBom(
-            @RequestBody BomImportRequestDTO request) {
+            @Valid @RequestBody BomImportRequestDTO request) {
         return ResponseEntity.ok(service.importBom(request));
     }
 

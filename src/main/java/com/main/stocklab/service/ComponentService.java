@@ -74,10 +74,10 @@ public class ComponentService {
     }
 
     public List<Component> findLowStock() {
-        return repository.findAll()
-                .stream()
-                .filter(c -> c.getQuantityInStock() != null && c.getMinimumQuantity() != null
-                        && c.getQuantityInStock() <= c.getMinimumQuantity())
-                .toList();
+        return repository.findLowStock();
+    }
+
+    public List<Component> findAllActive() {
+        return repository.findByActiveTrueOrderByPartNumber();
     }
 }

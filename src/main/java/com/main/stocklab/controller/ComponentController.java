@@ -4,6 +4,7 @@ import com.main.stocklab.dto.ComponentDTO;
 import com.main.stocklab.dto.CreateComponentDTO;
 import com.main.stocklab.model.Component;
 import com.main.stocklab.service.ComponentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,7 +46,7 @@ public class ComponentController {
     }
 
     @PostMapping
-    public ResponseEntity<ComponentDTO> create(@RequestBody CreateComponentDTO request) {
+    public ResponseEntity<ComponentDTO> create(@Valid @RequestBody CreateComponentDTO request) {
         Component component = componentService.createFromDTO(request);
         return ResponseEntity.ok(toDTO(component));
     }
@@ -56,6 +57,16 @@ public class ComponentController {
             @RequestBody CreateComponentDTO request) {
         Component component = componentService.update(partNumber, request);
         return ResponseEntity.ok(toDTO(component));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<java.util.List<ComponentDTO>> allActive() {
+        return ResponseEntity.ok(
+                componentService.findAllActive()
+                        .stream()
+                        .map(this::toDTO)
+                        .toList()
+        );
     }
 
     @GetMapping("/low-stock")

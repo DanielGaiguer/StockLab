@@ -21,6 +21,8 @@ public interface ComponentRepository extends JpaRepository<Component, Long> {
 
     List<Component> findByActiveTrue();
 
+    List<Component> findByActiveTrueOrderByPartNumber();
+
     @Query("SELECT COUNT(c) FROM Component c WHERE c.active = true AND c.quantityInStock <= 0")
     long countCritical();
 
@@ -29,4 +31,7 @@ public interface ComponentRepository extends JpaRepository<Component, Long> {
 
     @Query("SELECT COUNT(c) FROM Component c WHERE c.active = true AND (c.quantityInStock IS NULL OR c.quantityInStock > c.minimumQuantity OR c.minimumQuantity IS NULL)")
     long countOk();
+
+    @Query("SELECT c FROM Component c WHERE c.active = true AND c.quantityInStock IS NOT NULL AND c.minimumQuantity IS NOT NULL AND c.quantityInStock <= c.minimumQuantity ORDER BY c.partNumber")
+    List<Component> findLowStock();
 }
